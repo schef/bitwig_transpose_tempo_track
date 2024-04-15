@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project version="1.0">
+    <Application name="Bitwig Studio" version="5.1.6"/>
+    <Transport>
+        <Tempo max="666.000000" min="20.000000" unit="bpm" value="110.000000" id="id0" name="Tempo"/>
+        <TimeSignature denominator="4" numerator="4" id="id1"/>
+    </Transport>
+    <Structure>
+        <Track contentType="audio" loaded="true" id="id2" name="bH-man - Within heart chasm" color="#ff5706">
+            <Channel audioChannels="2" destination="id13" role="regular" solo="false" id="id3">
+                <Mute value="false" id="id6" name="Mute"/>
+                <Pan max="1.000000" min="0.000000" unit="normalized" value="0.500000" id="id5" name="Pan"/>
+                <Sends>
+                    <Send destination="id8" type="post" id="id17">
+                        <Volume max="1.000000" min="0.000000" unit="linear" value="0.000000" id="id18" name="Send"/>
+                    </Send>
+                </Sends>
+                <Volume max="2.000000" min="0.000000" unit="linear" value="0.316228" id="id4" name="Volume"/>
+            </Channel>
+        </Track>
+        <Track contentType="audio" loaded="true" id="id7" name="FX 1">
+            <Channel audioChannels="2" destination="id13" role="effect" solo="false" id="id8">
+                <Mute value="false" id="id11" name="Mute"/>
+                <Pan max="1.000000" min="0.000000" unit="normalized" value="0.500000" id="id10" name="Pan"/>
+                <Sends>
+                    <Send destination="id8" type="post" id="id19">
+                        <Volume max="1.000000" min="0.000000" unit="linear" value="0.000000" id="id20" name="Send"/>
+                    </Send>
+                </Sends>
+                <Volume max="2.000000" min="0.000000" unit="linear" value="1.000000" id="id9" name="Volume"/>
+            </Channel>
+        </Track>
+        <Track contentType="audio notes" loaded="true" id="id12" name="Master">
+            <Channel audioChannels="2" role="master" solo="false" id="id13">
+                <Mute value="false" id="id16" name="Mute"/>
+                <Pan max="1.000000" min="0.000000" unit="normalized" value="0.500000" id="id15" name="Pan"/>
+                <Volume max="2.000000" min="0.000000" unit="linear" value="1.000000" id="id14" name="Volume"/>
+            </Channel>
+        </Track>
+    </Structure>
+    <Arrangement id="id21">
+        <Lanes timeUnit="beats" id="id22">
+            <Lanes track="id2" id="id23">
+                <Clips id="id24">
+                    <Clip time="0.0" duration="577.5880002975464" playStart="0.0" fadeTimeUnit="beats" fadeInTime="0.0" fadeOutTime="0.0" name="bH-man - Within heart chasm-bounce-1">
+                        <Clips id="id25">
+                            <Clip time="0.07171916961669922" duration="577.5880002975464" contentTimeUnit="beats" playStart="0.0" fadeTimeUnit="beats" fadeInTime="0.0" fadeOutTime="0.0">
+                                <Warps contentTimeUnit="seconds" timeUnit="beats" id="id27">
+                                    <Audio algorithm="stretch" channels="2" sampleRate="44100" duration="315.0480045351474" id="id26">
+                                        <File path="audio/bH-man - Within heart chasm-bounce-1.wav"/>
+                                    </Audio>
+                                    <Warp time="0.0" contentTime="0.0"/>
+                                    <Warp time="3.930999755859375" contentTime="2.1441817147753315"/>
+                                    <Warp time="577.5880002975464" contentTime="315.0480045351474"/>
+                                </Warps>
+                            </Clip>
+                        </Clips>
+                    </Clip>
+                </Clips>
+            </Lanes>
+            <Lanes track="id7" id="id28">
+                <Clips id="id29"/>
+            </Lanes>
+            <Lanes track="id12" id="id30">
+                <Clips id="id31"/>
+            </Lanes>
+        </Lanes>
+        <Markers id="id34">
+            <Marker time="12.0" name="A" color="#e5e500"/>
+        </Markers>
+        <TempoAutomation unit="bpm" id="id33">
+            <Target parameter="id0"/>
+            <RealPoint value="110.000000" interpolation="linear" time="0.000000"/>
+        </TempoAutomation>
+        <TimeSignatureAutomation id="id32">
+            <Target parameter="id1"/>
+            <TimeSignaturePoint numerator="4" denominator="4" time="0.000000"/>
+        </TimeSignatureAutomation>
+    </Arrangement>
+    <Scenes>
+        <Scene id="id35" name="Scene 1">
+            <Lanes id="id36">
+                <ClipSlot hasStop="true" track="id2" id="id37"/>
+                <ClipSlot hasStop="true" track="id7" id="id38"/>
+                <ClipSlot hasStop="true" track="id12" id="id39"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id40" name="Scene 2">
+            <Lanes id="id41">
+                <ClipSlot hasStop="true" track="id2" id="id42"/>
+                <ClipSlot hasStop="true" track="id7" id="id43"/>
+                <ClipSlot hasStop="true" track="id12" id="id44"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id45" name="Scene 3">
+            <Lanes id="id46">
+                <ClipSlot hasStop="true" track="id2" id="id47"/>
+                <ClipSlot hasStop="true" track="id7" id="id48"/>
+                <ClipSlot hasStop="true" track="id12" id="id49"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id50" name="Scene 4">
+            <Lanes id="id51">
+                <ClipSlot hasStop="true" track="id2" id="id52"/>
+                <ClipSlot hasStop="true" track="id7" id="id53"/>
+                <ClipSlot hasStop="true" track="id12" id="id54"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id55" name="Scene 5">
+            <Lanes id="id56">
+                <ClipSlot hasStop="true" track="id2" id="id57"/>
+                <ClipSlot hasStop="true" track="id7" id="id58"/>
+                <ClipSlot hasStop="true" track="id12" id="id59"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id60" name="Scene 6">
+            <Lanes id="id61">
+                <ClipSlot hasStop="true" track="id2" id="id62"/>
+                <ClipSlot hasStop="true" track="id7" id="id63"/>
+                <ClipSlot hasStop="true" track="id12" id="id64"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id65" name="Scene 7">
+            <Lanes id="id66">
+                <ClipSlot hasStop="true" track="id2" id="id67"/>
+                <ClipSlot hasStop="true" track="id7" id="id68"/>
+                <ClipSlot hasStop="true" track="id12" id="id69"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id70" name="Scene 8">
+            <Lanes id="id71">
+                <ClipSlot hasStop="true" track="id2" id="id72"/>
+                <ClipSlot hasStop="true" track="id7" id="id73"/>
+                <ClipSlot hasStop="true" track="id12" id="id74"/>
+            </Lanes>
+        </Scene>
+    </Scenes>
+</Project>

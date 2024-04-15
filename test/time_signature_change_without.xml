@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project version="1.0">
+    <Application name="Bitwig Studio" version="5.1.6"/>
+    <Transport>
+        <Tempo max="666.000000" min="20.000000" unit="bpm" value="110.000000" id="id0" name="Tempo"/>
+        <TimeSignature denominator="4" numerator="4" id="id1"/>
+    </Transport>
+    <Structure>
+        <Track contentType="audio" loaded="true" id="id2" name="Audio 1" color="#c69f70">
+            <Channel audioChannels="2" destination="id13" role="regular" solo="false" id="id3">
+                <Mute value="false" id="id6" name="Mute"/>
+                <Pan max="1.000000" min="0.000000" unit="normalized" value="0.500000" id="id5" name="Pan"/>
+                <Sends>
+                    <Send destination="id8" type="post" id="id17">
+                        <Volume max="1.000000" min="0.000000" unit="linear" value="0.000000" id="id18" name="Send"/>
+                    </Send>
+                </Sends>
+                <Volume max="2.000000" min="0.000000" unit="linear" value="0.316228" id="id4" name="Volume"/>
+            </Channel>
+        </Track>
+        <Track contentType="audio" loaded="true" id="id7" name="FX 1">
+            <Channel audioChannels="2" destination="id13" role="effect" solo="false" id="id8">
+                <Mute value="false" id="id11" name="Mute"/>
+                <Pan max="1.000000" min="0.000000" unit="normalized" value="0.500000" id="id10" name="Pan"/>
+                <Sends>
+                    <Send destination="id8" type="post" id="id19">
+                        <Volume max="1.000000" min="0.000000" unit="linear" value="0.000000" id="id20" name="Send"/>
+                    </Send>
+                </Sends>
+                <Volume max="2.000000" min="0.000000" unit="linear" value="1.000000" id="id9" name="Volume"/>
+            </Channel>
+        </Track>
+        <Track contentType="audio notes" loaded="true" id="id12" name="Master">
+            <Channel audioChannels="2" role="master" solo="false" id="id13">
+                <Mute value="false" id="id16" name="Mute"/>
+                <Pan max="1.000000" min="0.000000" unit="normalized" value="0.500000" id="id15" name="Pan"/>
+                <Volume max="2.000000" min="0.000000" unit="linear" value="1.000000" id="id14" name="Volume"/>
+            </Channel>
+        </Track>
+    </Structure>
+    <Arrangement id="id21">
+        <Lanes timeUnit="beats" id="id22">
+            <Lanes track="id2" id="id23">
+                <Clips id="id24"/>
+            </Lanes>
+            <Lanes track="id7" id="id25">
+                <Clips id="id26"/>
+            </Lanes>
+            <Lanes track="id12" id="id27">
+                <Clips id="id28"/>
+            </Lanes>
+        </Lanes>
+    </Arrangement>
+    <Scenes>
+        <Scene id="id29" name="Scene 1">
+            <Lanes id="id30">
+                <ClipSlot hasStop="true" track="id2" id="id31"/>
+                <ClipSlot hasStop="true" track="id7" id="id32"/>
+                <ClipSlot hasStop="true" track="id12" id="id33"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id34" name="Scene 2">
+            <Lanes id="id35">
+                <ClipSlot hasStop="true" track="id2" id="id36"/>
+                <ClipSlot hasStop="true" track="id7" id="id37"/>
+                <ClipSlot hasStop="true" track="id12" id="id38"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id39" name="Scene 3">
+            <Lanes id="id40">
+                <ClipSlot hasStop="true" track="id2" id="id41"/>
+                <ClipSlot hasStop="true" track="id7" id="id42"/>
+                <ClipSlot hasStop="true" track="id12" id="id43"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id44" name="Scene 4">
+            <Lanes id="id45">
+                <ClipSlot hasStop="true" track="id2" id="id46"/>
+                <ClipSlot hasStop="true" track="id7" id="id47"/>
+                <ClipSlot hasStop="true" track="id12" id="id48"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id49" name="Scene 5">
+            <Lanes id="id50">
+                <ClipSlot hasStop="true" track="id2" id="id51"/>
+                <ClipSlot hasStop="true" track="id7" id="id52"/>
+                <ClipSlot hasStop="true" track="id12" id="id53"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id54" name="Scene 6">
+            <Lanes id="id55">
+                <ClipSlot hasStop="true" track="id2" id="id56"/>
+                <ClipSlot hasStop="true" track="id7" id="id57"/>
+                <ClipSlot hasStop="true" track="id12" id="id58"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id59" name="Scene 7">
+            <Lanes id="id60">
+                <ClipSlot hasStop="true" track="id2" id="id61"/>
+                <ClipSlot hasStop="true" track="id7" id="id62"/>
+                <ClipSlot hasStop="true" track="id12" id="id63"/>
+            </Lanes>
+        </Scene>
+        <Scene id="id64" name="Scene 8">
+            <Lanes id="id65">
+                <ClipSlot hasStop="true" track="id2" id="id66"/>
+                <ClipSlot hasStop="true" track="id7" id="id67"/>
+                <ClipSlot hasStop="true" track="id12" id="id68"/>
+            </Lanes>
+        </Scene>
+    </Scenes>
+</Project>
