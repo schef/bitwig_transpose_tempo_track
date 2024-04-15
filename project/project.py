@@ -476,12 +476,12 @@ class TempoAutomation:
             "required": True,
         }
     )
-    real_point: Optional[RealPoint] = field(
-        default=None,
+    real_point: List[RealPoint] = field(
+        default_factory=list,
         metadata={
             "name": "RealPoint",
             "type": "Element",
-            "required": True,
+            "min_occurs": 1,
         }
     )
 
@@ -503,12 +503,12 @@ class TimeSignatureAutomation:
             "required": True,
         }
     )
-    time_signature_point: Optional[TimeSignaturePoint] = field(
-        default=None,
+    time_signature_point: List[TimeSignaturePoint] = field(
+        default_factory=list,
         metadata={
             "name": "TimeSignaturePoint",
             "type": "Element",
-            "required": True,
+            "min_occurs": 1,
         }
     )
 

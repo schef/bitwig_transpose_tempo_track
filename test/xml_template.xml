@@ -71,10 +71,13 @@
         <TempoAutomation unit="bpm" id="id33">
             <Target parameter="id0"/>
             <RealPoint value="110.000000" interpolation="linear" time="0.000000"/>
+            <RealPoint value="110.000000" interpolation="linear" time="8.000000"/>
+            <RealPoint value="220.000000" interpolation="linear" time="12.000000"/>
         </TempoAutomation>
         <TimeSignatureAutomation id="id32">
             <Target parameter="id1"/>
             <TimeSignaturePoint numerator="4" denominator="4" time="0.000000"/>
+            <TimeSignaturePoint numerator="7" denominator="8" time="16.000000"/>
         </TimeSignatureAutomation>
     </Arrangement>
     <Scenes>

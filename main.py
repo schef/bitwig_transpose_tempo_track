@@ -44,6 +44,8 @@ if __name__ == "__main__":
     warps = oproject.arrangement.lanes.lanes[0].clips[0].clip[0].clips.clip[0].warps.warp
     markers = oproject.arrangement.markers.marker
 
+    from IPython import embed; embed()
+
     transcribe_filename = sys.argv[2]
     tf = TranscribeFile(transcribe_filename) 
 
