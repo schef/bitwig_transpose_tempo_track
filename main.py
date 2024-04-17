@@ -65,18 +65,20 @@ if __name__ == "__main__":
     time_signature.clear()
 
 
-    # default time signature
+    # default time signature, if no signature added on begining the measures could end in minus
     numerator = 4
     denominator = 4
-    # time_signature.append(TimeSignaturePoint(time='0.0', numerator=numerator, denominator=denominator))
+    time_signature.append(TimeSignaturePoint(time='0.0', numerator=numerator, denominator=denominator))
 
-    # default tempo
-    # tempo.append(RealPoint(time='0.0', value='120.0', interpolation=Interpolation.HOLD))
+    # default tempo if taken from the first writen
+    #tempo.append(RealPoint(time='0.0', value='120.0', interpolation=Interpolation.HOLD))
 
     # lets start in the second bar
     start_beat = float(numerator)
 
     for transcribe_mark in transcribe_file.get_marks():
+        if transcribe_mark.mark_type == "B":
+            continue
         splited_mark = transcribe_mark.label.split(";")
         # time signature
         for part in splited_mark:
@@ -96,7 +98,7 @@ if __name__ == "__main__":
         if transcribe_mark.mark_type == "S":
             mark_text = transcribe_mark.label.split(";")[0]
             markers.append(Marker(name=mark_text, color="#e5e500", time=start_beat))
-        start_beat += float(numerator)
+        start_beat += float(4 / float(denominator) * float(numerator))
 
     # extend the clip to beat duration so it is visible in the project
     oproject.arrangement.lanes.lanes[0].clips[0].clip[0].duration = start_beat
