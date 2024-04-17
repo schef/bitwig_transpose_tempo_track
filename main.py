@@ -44,27 +44,35 @@ if __name__ == "__main__":
     warps = oproject.arrangement.lanes.lanes[0].clips[0].clip[0].clips.clip[0].warps.warp
     markers = oproject.arrangement.markers.marker
 
-    from IPython import embed; embed()
-
     transcribe_filename = sys.argv[2]
-    tf = TranscribeFile(transcribe_filename) 
+    transcribe_file = TranscribeFile(transcribe_filename)
 
-    last_warp = warps.pop()
-    START_BEAT = warps.pop().time
-    beat_in_measure = 4.0
+    #from IPython import embed; embed()
 
-    start_beat = START_BEAT
-    for mark in tf.get_marks():
-        warps.append(Warp(start_beat, mark.timedelta.total_seconds()))
-        start_beat += beat_in_measure
-    warps.append(last_warp)
+    # latency between transcribe audio and bitwig audio
+    LATENCY = 0.04
 
-    start_beat = START_BEAT
-    for mark in tf.get_marks():
-        if not any(char.isdigit() for char in mark.label):
-            markers.append(Marker(name=mark.label, color="#e5e500", time=start_beat))
-        start_beat += beat_in_measure
-    warps.append(last_warp)
+    # default time signature
+    numerator = 4
+    denumerator = 4
+
+    # lets start in the second bar
+    start_beat = float(numerator)
+
+    # clean up warps
+    warps.clear()
+    # clean up marks
+    markers.clear()
+
+    for transcribe_mark in transcribe_file.get_marks():
+        # warps
+        warps.append(Warp(start_beat, transcribe_mark.timedelta.total_seconds() - LATENCY))
+        # markers
+        if not any(char.isdigit() for char in transcribe_mark.label):
+            markers.append(Marker(name=transcribe_mark.label, color="#e5e500", time=start_beat))
+        # time signature
+        # tempo
+        start_beat += float(numerator)
 
     #from IPython import embed; embed()
     save_file(oproject, dawproject_filename)
