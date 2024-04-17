@@ -1,4 +1,4 @@
-from project.project import (
+from project.xml_template import (
     Arrangement,
     AuPlugin,
     Audio,
