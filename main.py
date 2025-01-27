@@ -19,6 +19,7 @@ def extract_project_file(path):
         xml_string = Path(filepath).read_text()
         os.remove(TMP_FILE)
         parser = XmlParser()
+        from IPython import embed; embed()
         return parser.from_string(xml_string, Project)
 
 def save_file(oproject, path):
@@ -29,7 +30,7 @@ def save_file(oproject, path):
             for item in zr.infolist():
                 if item.filename == TMP_FILE:
                     config = SerializerConfig(pretty_print=True)
-                    serializer = XmlSerializer(config)
+                    serializer = XmlSerializer(config=config)
                     xml_string = serializer.render(oproject)
                     with open(TMP_FILE, "w") as f:
                         f.write(xml_string)

@@ -13,14 +13,14 @@ class Application:
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     version: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
 
@@ -74,13 +74,13 @@ class FileReference:
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     external: Optional[bool] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
 
@@ -106,24 +106,24 @@ class Nameable:
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     color: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     comment: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
 
 @dataclass
-class Point1:
+class PointAbstract:
     class Meta:
         name = "point"
 
@@ -132,7 +132,7 @@ class Point1:
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
 
@@ -168,7 +168,7 @@ class Warp1:
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     content_time: Optional[float] = field(
         default=None,
@@ -176,12 +176,12 @@ class Warp1:
             "name": "contentTime",
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
 
 @dataclass
-class Point(Point1):
+class Point(PointAbstract):
     pass
 
 
@@ -199,36 +199,36 @@ class AutomationTarget:
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     expression: Optional[ExpressionType] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     channel: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     key: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     controller: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
 
 @dataclass
-class BoolPoint1(Point1):
+class BoolPoint1(PointAbstract):
     class Meta:
         name = "boolPoint"
 
@@ -237,12 +237,12 @@ class BoolPoint1(Point1):
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
 
 @dataclass
-class EnumPoint1(Point1):
+class EnumPoint1(PointAbstract):
     class Meta:
         name = "enumPoint"
 
@@ -251,12 +251,12 @@ class EnumPoint1(Point1):
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
 
 @dataclass
-class IntegerPoint1(Point1):
+class IntegerPoint1(PointAbstract):
     class Meta:
         name = "integerPoint"
 
@@ -265,7 +265,7 @@ class IntegerPoint1(Point1):
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
 
@@ -279,12 +279,12 @@ class Marker1(Nameable):
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
 
 @dataclass
-class RealPoint1(Point1):
+class RealPoint1(PointAbstract):
     class Meta:
         name = "realPoint"
 
@@ -293,13 +293,13 @@ class RealPoint1(Point1):
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     interpolation: Optional[Interpolation] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
 
@@ -312,12 +312,12 @@ class Referenceable(Nameable):
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
 
 @dataclass
-class TimeSignaturePoint1(Point1):
+class TimeSignaturePoint1(PointAbstract):
     class Meta:
         name = "timeSignaturePoint"
 
@@ -326,14 +326,14 @@ class TimeSignaturePoint1(Point1):
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     denominator: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
 
@@ -383,12 +383,12 @@ class Parameter(Referenceable):
         metadata={
             "name": "parameterID",
             "type": "Attribute",
-        }
+        },
     )
 
 
 @dataclass
-class Timeline1(Referenceable):
+class TimelineAbstract(Referenceable):
     class Meta:
         name = "timeline"
 
@@ -397,18 +397,18 @@ class Timeline1(Referenceable):
         metadata={
             "name": "timeUnit",
             "type": "Attribute",
-        }
+        },
     )
     track: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
 
 @dataclass
-class Timeline(Timeline1):
+class Timeline(TimelineAbstract):
     pass
 
 
@@ -421,28 +421,7 @@ class BoolParameter1(Parameter):
         default=None,
         metadata={
             "type": "Attribute",
-        }
-    )
-
-
-@dataclass
-class ClipSlot1(Timeline1):
-    class Meta:
-        name = "clipSlot"
-
-    clip: Optional["Clip"] = field(
-        default=None,
-        metadata={
-            "name": "Clip",
-            "type": "Element",
-        }
-    )
-    has_stop: Optional[bool] = field(
-        default=None,
-        metadata={
-            "name": "hasStop",
-            "type": "Attribute",
-        }
+        },
     )
 
 
@@ -456,20 +435,20 @@ class EnumParameter1(Parameter):
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     labels: List[str] = field(
         default_factory=list,
         metadata={
             "type": "Attribute",
             "tokens": True,
-        }
+        },
     )
     value: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
 
@@ -482,24 +461,24 @@ class IntegerParameter1(Parameter):
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     min: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     value: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
 
 @dataclass
-class Markers(Timeline1):
+class Markers(TimelineAbstract):
     class Meta:
         name = "markers"
 
@@ -509,12 +488,12 @@ class Markers(Timeline1):
             "name": "Marker",
             "type": "Element",
             "min_occurs": 1,
-        }
+        },
     )
 
 
 @dataclass
-class MediaFile(Timeline1):
+class MediaFile(TimelineAbstract):
     class Meta:
         name = "mediaFile"
 
@@ -525,19 +504,19 @@ class MediaFile(Timeline1):
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     duration: Optional[float] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
 
 @dataclass
-class Points1(Timeline1):
+class Points1(TimelineAbstract):
     class Meta:
         name = "points"
 
@@ -548,55 +527,55 @@ class Points1(Timeline1):
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     point: List[Point] = field(
         default_factory=list,
         metadata={
             "name": "Point",
             "type": "Element",
-        }
+        },
     )
     real_point: List[RealPoint] = field(
         default_factory=list,
         metadata={
             "name": "RealPoint",
             "type": "Element",
-        }
+        },
     )
     enum_point: List[EnumPoint] = field(
         default_factory=list,
         metadata={
             "name": "EnumPoint",
             "type": "Element",
-        }
+        },
     )
     bool_point: List[BoolPoint] = field(
         default_factory=list,
         metadata={
             "name": "BoolPoint",
             "type": "Element",
-        }
+        },
     )
     integer_point: List[IntegerPoint] = field(
         default_factory=list,
         metadata={
             "name": "IntegerPoint",
             "type": "Element",
-        }
+        },
     )
     time_signature_point: List[TimeSignaturePoint] = field(
         default_factory=list,
         metadata={
             "name": "TimeSignaturePoint",
             "type": "Element",
-        }
+        },
     )
     unit: Optional[Unit] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
 
@@ -609,26 +588,26 @@ class RealParameter1(Parameter):
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     min: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     unit: Optional[Unit] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     value: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
 
@@ -642,24 +621,19 @@ class TimeSignatureParameter1(Parameter):
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     numerator: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
 
 @dataclass
 class BoolParameter(BoolParameter1):
-    pass
-
-
-@dataclass
-class ClipSlot(ClipSlot1):
     pass
 
 
@@ -697,14 +671,14 @@ class Audio1(MediaFile):
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     channels: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     sample_rate: Optional[int] = field(
         default=None,
@@ -712,7 +686,7 @@ class Audio1(MediaFile):
             "name": "sampleRate",
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
 
@@ -728,7 +702,7 @@ class EqBand:
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     gain: Optional[RealParameter1] = field(
         default=None,
@@ -736,7 +710,7 @@ class EqBand:
             "name": "Gain",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     q: Optional[RealParameter1] = field(
         default=None,
@@ -744,7 +718,7 @@ class EqBand:
             "name": "Q",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     enabled: Optional[BoolParameter1] = field(
         default=None,
@@ -752,7 +726,7 @@ class EqBand:
             "name": "Enabled",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     type_value: Optional[EqBandType] = field(
         default=None,
@@ -760,13 +734,13 @@ class EqBand:
             "name": "type",
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     order: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
 
@@ -781,7 +755,7 @@ class Send(Referenceable):
             "name": "Pan",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     volume: Optional[RealParameter1] = field(
         default=None,
@@ -790,20 +764,20 @@ class Send(Referenceable):
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     destination: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     type_value: Optional[SendType] = field(
         default=None,
         metadata={
             "name": "type",
             "type": "Attribute",
-        }
+        },
     )
 
 
@@ -818,7 +792,7 @@ class Transport:
             "name": "Tempo",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     time_signature: Optional[TimeSignatureParameter1] = field(
         default=None,
@@ -826,7 +800,7 @@ class Transport:
             "name": "TimeSignature",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
 
@@ -839,14 +813,14 @@ class Video1(MediaFile):
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     channels: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     sample_rate: Optional[int] = field(
         default=None,
@@ -854,7 +828,7 @@ class Video1(MediaFile):
             "name": "sampleRate",
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
 
@@ -879,7 +853,7 @@ class Device1(Referenceable):
             "name": "Parameters",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     enabled: Optional[BoolParameter1] = field(
         default=None,
@@ -887,7 +861,7 @@ class Device1(Referenceable):
             "name": "Enabled",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     state: Optional[FileReference] = field(
         default=None,
@@ -895,14 +869,14 @@ class Device1(Referenceable):
             "name": "State",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     device_id: Optional[str] = field(
         default=None,
         metadata={
             "name": "deviceID",
             "type": "Attribute",
-        }
+        },
     )
     device_name: Optional[str] = field(
         default=None,
@@ -910,7 +884,7 @@ class Device1(Referenceable):
             "name": "deviceName",
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     device_role: Optional[DeviceRole] = field(
         default=None,
@@ -918,20 +892,20 @@ class Device1(Referenceable):
             "name": "deviceRole",
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
     device_vendor: Optional[str] = field(
         default=None,
         metadata={
             "name": "deviceVendor",
             "type": "Attribute",
-        }
+        },
     )
     loaded: Optional[bool] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
     @dataclass
@@ -940,42 +914,42 @@ class Device1(Referenceable):
             default_factory=list,
             metadata={
                 "type": "Element",
-            }
+            },
         )
         real_parameter: List[RealParameter] = field(
             default_factory=list,
             metadata={
                 "name": "RealParameter",
                 "type": "Element",
-            }
+            },
         )
         bool_parameter: List[BoolParameter] = field(
             default_factory=list,
             metadata={
                 "name": "BoolParameter",
                 "type": "Element",
-            }
+            },
         )
         integer_parameter: List[IntegerParameter] = field(
             default_factory=list,
             metadata={
                 "name": "IntegerParameter",
                 "type": "Element",
-            }
+            },
         )
         enum_parameter: List[EnumParameter] = field(
             default_factory=list,
             metadata={
                 "name": "EnumParameter",
                 "type": "Element",
-            }
+            },
         )
         time_signature_parameter: List[TimeSignatureParameter] = field(
             default_factory=list,
             metadata={
                 "name": "TimeSignatureParameter",
                 "type": "Element",
-            }
+            },
         )
 
 
@@ -991,6 +965,82 @@ class BuiltinDevice1(Device1):
 
 
 @dataclass
+class Lanes1(TimelineAbstract):
+    class Meta:
+        name = "lanes"
+
+    timeline: List[Timeline] = field(
+        default_factory=list,
+        metadata={
+            "name": "Timeline",
+            "type": "Element",
+        },
+    )
+    lanes: List["Lanes"] = field(
+        default_factory=list,
+        metadata={
+            "name": "Lanes",
+            "type": "Element",
+        },
+    )
+    notes: List["Notes"] = field(
+        default_factory=list,
+        metadata={
+            "name": "Notes",
+            "type": "Element",
+        },
+    )
+    clips: List["Clips"] = field(
+        default_factory=list,
+        metadata={
+            "name": "Clips",
+            "type": "Element",
+        },
+    )
+    clip_slot: List["ClipSlot"] = field(
+        default_factory=list,
+        metadata={
+            "name": "ClipSlot",
+            "type": "Element",
+        },
+    )
+    markers: List[Markers] = field(
+        default_factory=list,
+        metadata={
+            "type": "Element",
+        },
+    )
+    warps: List["Warps"] = field(
+        default_factory=list,
+        metadata={
+            "name": "Warps",
+            "type": "Element",
+        },
+    )
+    audio: List[Audio] = field(
+        default_factory=list,
+        metadata={
+            "name": "Audio",
+            "type": "Element",
+        },
+    )
+    video: List[Video] = field(
+        default_factory=list,
+        metadata={
+            "name": "Video",
+            "type": "Element",
+        },
+    )
+    points: List[Points] = field(
+        default_factory=list,
+        metadata={
+            "name": "Points",
+            "type": "Element",
+        },
+    )
+
+
+@dataclass
 class Plugin(Device1):
     class Meta:
         name = "plugin"
@@ -1000,99 +1050,7 @@ class Plugin(Device1):
         metadata={
             "name": "pluginVersion",
             "type": "Attribute",
-        }
-    )
-
-
-@dataclass
-class Warps1(Timeline1):
-    class Meta:
-        name = "warps"
-
-    timeline: Optional[Timeline] = field(
-        default=None,
-        metadata={
-            "name": "Timeline",
-            "type": "Element",
-        }
-    )
-    lanes: Optional["Lanes"] = field(
-        default=None,
-        metadata={
-            "name": "Lanes",
-            "type": "Element",
-        }
-    )
-    notes: Optional["Notes"] = field(
-        default=None,
-        metadata={
-            "name": "Notes",
-            "type": "Element",
-        }
-    )
-    clips: Optional["Clips"] = field(
-        default=None,
-        metadata={
-            "name": "Clips",
-            "type": "Element",
-        }
-    )
-    clip_slot: Optional[ClipSlot] = field(
-        default=None,
-        metadata={
-            "name": "ClipSlot",
-            "type": "Element",
-        }
-    )
-    markers: Optional[Markers] = field(
-        default=None,
-        metadata={
-            "type": "Element",
-        }
-    )
-    warps: Optional["Warps"] = field(
-        default=None,
-        metadata={
-            "name": "Warps",
-            "type": "Element",
-        }
-    )
-    audio: Optional[Audio] = field(
-        default=None,
-        metadata={
-            "name": "Audio",
-            "type": "Element",
-        }
-    )
-    video: Optional[Video] = field(
-        default=None,
-        metadata={
-            "name": "Video",
-            "type": "Element",
-        }
-    )
-    points: Optional[Points] = field(
-        default=None,
-        metadata={
-            "name": "Points",
-            "type": "Element",
-        }
-    )
-    warp: List[Warp] = field(
-        default_factory=list,
-        metadata={
-            "name": "Warp",
-            "type": "Element",
-            "min_occurs": 1,
-        }
-    )
-    content_time_unit: Optional[TimeUnit] = field(
-        default=None,
-        metadata={
-            "name": "contentTimeUnit",
-            "type": "Attribute",
-            "required": True,
-        }
+        },
     )
 
 
@@ -1102,7 +1060,7 @@ class BuiltinDevice(BuiltinDevice1):
 
 
 @dataclass
-class Warps(Warps1):
+class Lanes(Lanes1):
     pass
 
 
@@ -1129,7 +1087,7 @@ class Compressor1(BuiltinDevice1):
             "name": "Attack",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     auto_makeup: Optional[BoolParameter1] = field(
         default=None,
@@ -1137,7 +1095,7 @@ class Compressor1(BuiltinDevice1):
             "name": "AutoMakeup",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     input_gain: Optional[RealParameter1] = field(
         default=None,
@@ -1145,7 +1103,7 @@ class Compressor1(BuiltinDevice1):
             "name": "InputGain",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     output_gain: Optional[RealParameter1] = field(
         default=None,
@@ -1153,7 +1111,7 @@ class Compressor1(BuiltinDevice1):
             "name": "OutputGain",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     ratio: Optional[RealParameter1] = field(
         default=None,
@@ -1161,7 +1119,7 @@ class Compressor1(BuiltinDevice1):
             "name": "Ratio",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     release: Optional[RealParameter1] = field(
         default=None,
@@ -1169,7 +1127,7 @@ class Compressor1(BuiltinDevice1):
             "name": "Release",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     threshold: Optional[RealParameter1] = field(
         default=None,
@@ -1177,7 +1135,7 @@ class Compressor1(BuiltinDevice1):
             "name": "Threshold",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
 
@@ -1192,7 +1150,7 @@ class Equalizer1(BuiltinDevice1):
             "name": "Band",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     input_gain: Optional[RealParameter1] = field(
         default=None,
@@ -1200,7 +1158,7 @@ class Equalizer1(BuiltinDevice1):
             "name": "InputGain",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     output_gain: Optional[RealParameter1] = field(
         default=None,
@@ -1208,7 +1166,7 @@ class Equalizer1(BuiltinDevice1):
             "name": "OutputGain",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
 
@@ -1223,7 +1181,7 @@ class Limiter1(BuiltinDevice1):
             "name": "Attack",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     input_gain: Optional[RealParameter1] = field(
         default=None,
@@ -1231,7 +1189,7 @@ class Limiter1(BuiltinDevice1):
             "name": "InputGain",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     output_gain: Optional[RealParameter1] = field(
         default=None,
@@ -1239,7 +1197,7 @@ class Limiter1(BuiltinDevice1):
             "name": "OutputGain",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     release: Optional[RealParameter1] = field(
         default=None,
@@ -1247,7 +1205,7 @@ class Limiter1(BuiltinDevice1):
             "name": "Release",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     threshold: Optional[RealParameter1] = field(
         default=None,
@@ -1255,7 +1213,7 @@ class Limiter1(BuiltinDevice1):
             "name": "Threshold",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
 
@@ -1270,7 +1228,7 @@ class NoiseGate1(BuiltinDevice1):
             "name": "Attack",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     range: Optional[RealParameter1] = field(
         default=None,
@@ -1278,7 +1236,7 @@ class NoiseGate1(BuiltinDevice1):
             "name": "Range",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     ratio: Optional[RealParameter1] = field(
         default=None,
@@ -1286,7 +1244,7 @@ class NoiseGate1(BuiltinDevice1):
             "name": "Ratio",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     release: Optional[RealParameter1] = field(
         default=None,
@@ -1294,7 +1252,7 @@ class NoiseGate1(BuiltinDevice1):
             "name": "Release",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     threshold: Optional[RealParameter1] = field(
         default=None,
@@ -1302,7 +1260,7 @@ class NoiseGate1(BuiltinDevice1):
             "name": "Threshold",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
 
 
@@ -1359,158 +1317,166 @@ class Vst3Plugin(Vst3Plugin1):
 
 
 @dataclass
-class Clip1(Nameable):
+class Arrangement1(Referenceable):
     class Meta:
-        name = "clip"
+        name = "arrangement"
+
+    lanes: Optional[Lanes] = field(
+        default=None,
+        metadata={
+            "name": "Lanes",
+            "type": "Element",
+        },
+    )
+    markers: Optional[Markers] = field(
+        default=None,
+        metadata={
+            "name": "Markers",
+            "type": "Element",
+            "namespace": "",
+        },
+    )
+    tempo_automation: Optional[Points1] = field(
+        default=None,
+        metadata={
+            "name": "TempoAutomation",
+            "type": "Element",
+            "namespace": "",
+        },
+    )
+    time_signature_automation: Optional[Points1] = field(
+        default=None,
+        metadata={
+            "name": "TimeSignatureAutomation",
+            "type": "Element",
+            "namespace": "",
+        },
+    )
+
+
+@dataclass
+class Note1:
+    class Meta:
+        name = "note"
 
     timeline: Optional[Timeline] = field(
         default=None,
         metadata={
             "name": "Timeline",
             "type": "Element",
-        }
+        },
     )
-    lanes: Optional["Lanes"] = field(
+    lanes: Optional[Lanes] = field(
         default=None,
         metadata={
             "name": "Lanes",
             "type": "Element",
-        }
+        },
     )
     notes: Optional["Notes"] = field(
         default=None,
         metadata={
             "name": "Notes",
             "type": "Element",
-        }
+        },
     )
     clips: Optional["Clips"] = field(
         default=None,
         metadata={
             "name": "Clips",
             "type": "Element",
-        }
+        },
     )
-    clip_slot: Optional[ClipSlot] = field(
+    clip_slot: Optional["ClipSlot"] = field(
         default=None,
         metadata={
             "name": "ClipSlot",
             "type": "Element",
-        }
+        },
     )
     markers: Optional[Markers] = field(
         default=None,
         metadata={
             "type": "Element",
-        }
+        },
     )
-    warps: Optional[Warps] = field(
+    warps: Optional["Warps"] = field(
         default=None,
         metadata={
             "name": "Warps",
             "type": "Element",
-        }
+        },
     )
     audio: Optional[Audio] = field(
         default=None,
         metadata={
             "name": "Audio",
             "type": "Element",
-        }
+        },
     )
     video: Optional[Video] = field(
         default=None,
         metadata={
             "name": "Video",
             "type": "Element",
-        }
+        },
     )
     points: Optional[Points] = field(
         default=None,
         metadata={
             "name": "Points",
             "type": "Element",
-        }
+        },
     )
-    time: Optional[float] = field(
+    time: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
-    duration: Optional[float] = field(
+    duration: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+            "required": True,
+        },
     )
-    content_time_unit: Optional[TimeUnit] = field(
-        default=None,
-        metadata={
-            "name": "contentTimeUnit",
-            "type": "Attribute",
-        }
-    )
-    play_start: Optional[float] = field(
-        default=None,
-        metadata={
-            "name": "playStart",
-            "type": "Attribute",
-        }
-    )
-    play_stop: Optional[float] = field(
-        default=None,
-        metadata={
-            "name": "playStop",
-            "type": "Attribute",
-        }
-    )
-    loop_start: Optional[float] = field(
-        default=None,
-        metadata={
-            "name": "loopStart",
-            "type": "Attribute",
-        }
-    )
-    loop_end: Optional[float] = field(
-        default=None,
-        metadata={
-            "name": "loopEnd",
-            "type": "Attribute",
-        }
-    )
-    fade_time_unit: Optional[TimeUnit] = field(
-        default=None,
-        metadata={
-            "name": "fadeTimeUnit",
-            "type": "Attribute",
-        }
-    )
-    fade_in_time: Optional[float] = field(
-        default=None,
-        metadata={
-            "name": "fadeInTime",
-            "type": "Attribute",
-        }
-    )
-    fade_out_time: Optional[float] = field(
-        default=None,
-        metadata={
-            "name": "fadeOutTime",
-            "type": "Attribute",
-        }
-    )
-    reference: Optional[str] = field(
+    channel: Optional[int] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+            "required": True,
+        },
+    )
+    key: Optional[int] = field(
+        default=None,
+        metadata={
+            "type": "Attribute",
+            "required": True,
+        },
+    )
+    vel: Optional[str] = field(
+        default=None,
+        metadata={
+            "type": "Attribute",
+        },
+    )
+    rel: Optional[str] = field(
+        default=None,
+        metadata={
+            "type": "Attribute",
+        },
     )
 
 
 @dataclass
-class Clip(Clip1):
+class Arrangement(Arrangement1):
+    pass
+
+
+@dataclass
+class Note(Note1):
     pass
 
 
@@ -1525,7 +1491,7 @@ class Channel1(Lane):
             "name": "Devices",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     mute: Optional[BoolParameter1] = field(
         default=None,
@@ -1533,7 +1499,7 @@ class Channel1(Lane):
             "name": "Mute",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     pan: Optional[RealParameter1] = field(
         default=None,
@@ -1541,7 +1507,7 @@ class Channel1(Lane):
             "name": "Pan",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     sends: Optional["Channel1.Sends"] = field(
         default=None,
@@ -1549,7 +1515,7 @@ class Channel1(Lane):
             "name": "Sends",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     volume: Optional[RealParameter1] = field(
         default=None,
@@ -1557,32 +1523,32 @@ class Channel1(Lane):
             "name": "Volume",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     audio_channels: Optional[int] = field(
         default=None,
         metadata={
             "name": "audioChannels",
             "type": "Attribute",
-        }
+        },
     )
     destination: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     role: Optional[MixerRole] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
     solo: Optional[bool] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
     @dataclass
@@ -1592,70 +1558,70 @@ class Channel1(Lane):
             metadata={
                 "name": "Device",
                 "type": "Element",
-            }
+            },
         )
         vst2_plugin: List[Vst2Plugin] = field(
             default_factory=list,
             metadata={
                 "name": "Vst2Plugin",
                 "type": "Element",
-            }
+            },
         )
         vst3_plugin: List[Vst3Plugin] = field(
             default_factory=list,
             metadata={
                 "name": "Vst3Plugin",
                 "type": "Element",
-            }
+            },
         )
         clap_plugin: List[ClapPlugin] = field(
             default_factory=list,
             metadata={
                 "name": "ClapPlugin",
                 "type": "Element",
-            }
+            },
         )
         builtin_device: List[BuiltinDevice] = field(
             default_factory=list,
             metadata={
                 "name": "BuiltinDevice",
                 "type": "Element",
-            }
+            },
         )
         equalizer: List[Equalizer] = field(
             default_factory=list,
             metadata={
                 "name": "Equalizer",
                 "type": "Element",
-            }
+            },
         )
         compressor: List[Compressor] = field(
             default_factory=list,
             metadata={
                 "name": "Compressor",
                 "type": "Element",
-            }
+            },
         )
         noise_gate: List[NoiseGate] = field(
             default_factory=list,
             metadata={
                 "name": "NoiseGate",
                 "type": "Element",
-            }
+            },
         )
         limiter: List[Limiter] = field(
             default_factory=list,
             metadata={
                 "name": "Limiter",
                 "type": "Element",
-            }
+            },
         )
         au_plugin: List[AuPlugin] = field(
             default_factory=list,
             metadata={
                 "name": "AuPlugin",
                 "type": "Element",
-            }
+            },
         )
 
     @dataclass
@@ -1666,7 +1632,7 @@ class Channel1(Lane):
                 "name": "Send",
                 "type": "Element",
                 "namespace": "",
-            }
+            },
         )
 
 
@@ -1676,21 +1642,21 @@ class Channel(Channel1):
 
 
 @dataclass
-class Clips1(Timeline1):
+class Notes1(TimelineAbstract):
     class Meta:
-        name = "clips"
+        name = "notes"
 
-    clip: List[Clip] = field(
+    note: List[Note] = field(
         default_factory=list,
         metadata={
-            "name": "Clip",
+            "name": "Note",
             "type": "Element",
-        }
+        },
     )
 
 
 @dataclass
-class Clips(Clips1):
+class Notes(Notes1):
     pass
 
 
@@ -1704,14 +1670,14 @@ class Track1(Lane):
         metadata={
             "name": "Channel",
             "type": "Element",
-        }
+        },
     )
     track: List["Track"] = field(
         default_factory=list,
         metadata={
             "name": "Track",
             "type": "Element",
-        }
+        },
     )
     content_type: List[ContentType] = field(
         default_factory=list,
@@ -1719,13 +1685,13 @@ class Track1(Lane):
             "name": "contentType",
             "type": "Attribute",
             "tokens": True,
-        }
+        },
     )
     loaded: Optional[bool] = field(
         default=None,
         metadata={
             "type": "Attribute",
-        }
+        },
     )
 
 
@@ -1735,262 +1701,301 @@ class Track(Track1):
 
 
 @dataclass
-class Note1:
+class Clip1(Nameable):
     class Meta:
-        name = "note"
+        name = "clip"
 
     timeline: Optional[Timeline] = field(
         default=None,
         metadata={
             "name": "Timeline",
             "type": "Element",
-        }
+        },
     )
-    lanes: Optional["Lanes"] = field(
+    lanes: Optional[Lanes] = field(
         default=None,
         metadata={
             "name": "Lanes",
             "type": "Element",
-        }
+        },
     )
-    notes: Optional["Notes"] = field(
+    notes: Optional[Notes] = field(
         default=None,
         metadata={
             "name": "Notes",
             "type": "Element",
-        }
+        },
     )
-    clips: Optional[Clips] = field(
+    clips: Optional["Clips"] = field(
         default=None,
         metadata={
             "name": "Clips",
             "type": "Element",
-        }
+        },
     )
-    clip_slot: Optional[ClipSlot] = field(
+    clip_slot: Optional["ClipSlot"] = field(
         default=None,
         metadata={
             "name": "ClipSlot",
             "type": "Element",
-        }
+        },
     )
     markers: Optional[Markers] = field(
         default=None,
         metadata={
             "type": "Element",
-        }
+        },
     )
-    warps: Optional[Warps] = field(
+    warps: Optional["Warps"] = field(
         default=None,
         metadata={
             "name": "Warps",
             "type": "Element",
-        }
+        },
     )
     audio: Optional[Audio] = field(
         default=None,
         metadata={
             "name": "Audio",
             "type": "Element",
-        }
+        },
     )
     video: Optional[Video] = field(
         default=None,
         metadata={
             "name": "Video",
             "type": "Element",
-        }
+        },
     )
     points: Optional[Points] = field(
         default=None,
         metadata={
             "name": "Points",
             "type": "Element",
-        }
+        },
     )
-    time: Optional[str] = field(
+    time: Optional[float] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
-    duration: Optional[str] = field(
+    duration: Optional[float] = field(
         default=None,
         metadata={
             "type": "Attribute",
-            "required": True,
-        }
+        },
     )
-    channel: Optional[int] = field(
+    content_time_unit: Optional[TimeUnit] = field(
+        default=None,
+        metadata={
+            "name": "contentTimeUnit",
+            "type": "Attribute",
+        },
+    )
+    play_start: Optional[float] = field(
+        default=None,
+        metadata={
+            "name": "playStart",
+            "type": "Attribute",
+        },
+    )
+    play_stop: Optional[float] = field(
+        default=None,
+        metadata={
+            "name": "playStop",
+            "type": "Attribute",
+        },
+    )
+    loop_start: Optional[float] = field(
+        default=None,
+        metadata={
+            "name": "loopStart",
+            "type": "Attribute",
+        },
+    )
+    loop_end: Optional[float] = field(
+        default=None,
+        metadata={
+            "name": "loopEnd",
+            "type": "Attribute",
+        },
+    )
+    fade_time_unit: Optional[TimeUnit] = field(
+        default=None,
+        metadata={
+            "name": "fadeTimeUnit",
+            "type": "Attribute",
+        },
+    )
+    fade_in_time: Optional[float] = field(
+        default=None,
+        metadata={
+            "name": "fadeInTime",
+            "type": "Attribute",
+        },
+    )
+    fade_out_time: Optional[float] = field(
+        default=None,
+        metadata={
+            "name": "fadeOutTime",
+            "type": "Attribute",
+        },
+    )
+    reference: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
-            "required": True,
-        }
-    )
-    key: Optional[int] = field(
-        default=None,
-        metadata={
-            "type": "Attribute",
-            "required": True,
-        }
-    )
-    vel: Optional[str] = field(
-        default=None,
-        metadata={
-            "type": "Attribute",
-        }
-    )
-    rel: Optional[str] = field(
-        default=None,
-        metadata={
-            "type": "Attribute",
-        }
+        },
     )
 
 
 @dataclass
-class Note(Note1):
+class Clip(Clip1):
     pass
 
 
 @dataclass
-class Notes1(Timeline1):
+class ClipSlot1(TimelineAbstract):
     class Meta:
-        name = "notes"
+        name = "clipSlot"
 
-    note: List[Note] = field(
-        default_factory=list,
+    clip: Optional[Clip] = field(
+        default=None,
         metadata={
-            "name": "Note",
+            "name": "Clip",
             "type": "Element",
-        }
+        },
+    )
+    has_stop: Optional[bool] = field(
+        default=None,
+        metadata={
+            "name": "hasStop",
+            "type": "Attribute",
+        },
     )
 
 
 @dataclass
-class Notes(Notes1):
+class Clips1(TimelineAbstract):
+    class Meta:
+        name = "clips"
+
+    clip: List[Clip] = field(
+        default_factory=list,
+        metadata={
+            "name": "Clip",
+            "type": "Element",
+        },
+    )
+
+
+@dataclass
+class ClipSlot(ClipSlot1):
     pass
 
 
 @dataclass
-class Lanes1(Timeline1):
-    class Meta:
-        name = "lanes"
+class Clips(Clips1):
+    pass
 
-    timeline: List[Timeline] = field(
-        default_factory=list,
+
+@dataclass
+class Warps1(TimelineAbstract):
+    class Meta:
+        name = "warps"
+
+    timeline: Optional[Timeline] = field(
+        default=None,
         metadata={
             "name": "Timeline",
             "type": "Element",
-        }
+        },
     )
-    lanes: List["Lanes"] = field(
-        default_factory=list,
-        metadata={
-            "name": "Lanes",
-            "type": "Element",
-        }
-    )
-    notes: List[Notes] = field(
-        default_factory=list,
-        metadata={
-            "name": "Notes",
-            "type": "Element",
-        }
-    )
-    clips: List[Clips] = field(
-        default_factory=list,
-        metadata={
-            "name": "Clips",
-            "type": "Element",
-        }
-    )
-    clip_slot: List[ClipSlot] = field(
-        default_factory=list,
-        metadata={
-            "name": "ClipSlot",
-            "type": "Element",
-        }
-    )
-    markers: List[Markers] = field(
-        default_factory=list,
-        metadata={
-            "type": "Element",
-        }
-    )
-    warps: List[Warps] = field(
-        default_factory=list,
-        metadata={
-            "name": "Warps",
-            "type": "Element",
-        }
-    )
-    audio: List[Audio] = field(
-        default_factory=list,
-        metadata={
-            "name": "Audio",
-            "type": "Element",
-        }
-    )
-    video: List[Video] = field(
-        default_factory=list,
-        metadata={
-            "name": "Video",
-            "type": "Element",
-        }
-    )
-    points: List[Points] = field(
-        default_factory=list,
-        metadata={
-            "name": "Points",
-            "type": "Element",
-        }
-    )
-
-
-@dataclass
-class Lanes(Lanes1):
-    pass
-
-
-@dataclass
-class Arrangement1(Referenceable):
-    class Meta:
-        name = "arrangement"
-
     lanes: Optional[Lanes] = field(
         default=None,
         metadata={
             "name": "Lanes",
             "type": "Element",
-        }
+        },
+    )
+    notes: Optional[Notes] = field(
+        default=None,
+        metadata={
+            "name": "Notes",
+            "type": "Element",
+        },
+    )
+    clips: Optional[Clips] = field(
+        default=None,
+        metadata={
+            "name": "Clips",
+            "type": "Element",
+        },
+    )
+    clip_slot: Optional[ClipSlot] = field(
+        default=None,
+        metadata={
+            "name": "ClipSlot",
+            "type": "Element",
+        },
     )
     markers: Optional[Markers] = field(
         default=None,
         metadata={
-            "name": "Markers",
             "type": "Element",
-            "namespace": "",
-        }
+        },
     )
-    tempo_automation: Optional[Points1] = field(
+    warps: Optional["Warps"] = field(
         default=None,
         metadata={
-            "name": "TempoAutomation",
+            "name": "Warps",
             "type": "Element",
-            "namespace": "",
-        }
+        },
     )
-    time_signature_automation: Optional[Points1] = field(
+    audio: Optional[Audio] = field(
         default=None,
         metadata={
-            "name": "TimeSignatureAutomation",
+            "name": "Audio",
             "type": "Element",
-            "namespace": "",
-        }
+        },
     )
+    video: Optional[Video] = field(
+        default=None,
+        metadata={
+            "name": "Video",
+            "type": "Element",
+        },
+    )
+    points: Optional[Points] = field(
+        default=None,
+        metadata={
+            "name": "Points",
+            "type": "Element",
+        },
+    )
+    warp: List[Warp] = field(
+        default_factory=list,
+        metadata={
+            "name": "Warp",
+            "type": "Element",
+            "min_occurs": 1,
+        },
+    )
+    content_time_unit: Optional[TimeUnit] = field(
+        default=None,
+        metadata={
+            "name": "contentTimeUnit",
+            "type": "Attribute",
+            "required": True,
+        },
+    )
+
+
+@dataclass
+class Warps(Warps1):
+    pass
 
 
 @dataclass
@@ -2003,75 +2008,70 @@ class Scene1(Referenceable):
         metadata={
             "name": "Timeline",
             "type": "Element",
-        }
+        },
     )
     lanes: Optional[Lanes] = field(
         default=None,
         metadata={
             "name": "Lanes",
             "type": "Element",
-        }
+        },
     )
     notes: Optional[Notes] = field(
         default=None,
         metadata={
             "name": "Notes",
             "type": "Element",
-        }
+        },
     )
     clips: Optional[Clips] = field(
         default=None,
         metadata={
             "name": "Clips",
             "type": "Element",
-        }
+        },
     )
     clip_slot: Optional[ClipSlot] = field(
         default=None,
         metadata={
             "name": "ClipSlot",
             "type": "Element",
-        }
+        },
     )
     markers: Optional[Markers] = field(
         default=None,
         metadata={
             "type": "Element",
-        }
+        },
     )
     warps: Optional[Warps] = field(
         default=None,
         metadata={
             "name": "Warps",
             "type": "Element",
-        }
+        },
     )
     audio: Optional[Audio] = field(
         default=None,
         metadata={
             "name": "Audio",
             "type": "Element",
-        }
+        },
     )
     video: Optional[Video] = field(
         default=None,
         metadata={
             "name": "Video",
             "type": "Element",
-        }
+        },
     )
     points: Optional[Points] = field(
         default=None,
         metadata={
             "name": "Points",
             "type": "Element",
-        }
+        },
     )
-
-
-@dataclass
-class Arrangement(Arrangement1):
-    pass
 
 
 @dataclass
@@ -2091,7 +2091,7 @@ class Project1:
             "type": "Element",
             "namespace": "",
             "required": True,
-        }
+        },
     )
     transport: Optional[Transport] = field(
         default=None,
@@ -2099,7 +2099,7 @@ class Project1:
             "name": "Transport",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     structure: Optional["Project1.Structure"] = field(
         default=None,
@@ -2107,14 +2107,14 @@ class Project1:
             "name": "Structure",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     arrangement: Optional[Arrangement] = field(
         default=None,
         metadata={
             "name": "Arrangement",
             "type": "Element",
-        }
+        },
     )
     scenes: Optional["Project1.Scenes"] = field(
         default=None,
@@ -2122,14 +2122,14 @@ class Project1:
             "name": "Scenes",
             "type": "Element",
             "namespace": "",
-        }
+        },
     )
     version: Optional[str] = field(
         default=None,
         metadata={
             "type": "Attribute",
             "required": True,
-        }
+        },
     )
 
     @dataclass
@@ -2139,14 +2139,14 @@ class Project1:
             metadata={
                 "name": "Track",
                 "type": "Element",
-            }
+            },
         )
         channel: List[Channel] = field(
             default_factory=list,
             metadata={
                 "name": "Channel",
                 "type": "Element",
-            }
+            },
         )
 
     @dataclass
@@ -2156,7 +2156,7 @@ class Project1:
             metadata={
                 "name": "Scene",
                 "type": "Element",
-            }
+            },
         )
 
 
