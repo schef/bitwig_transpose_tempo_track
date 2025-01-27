@@ -1,4 +1,4 @@
-from project.xml_template import (
+from project.project import (
     Application,
     Arrangement,
     Arrangement1,
