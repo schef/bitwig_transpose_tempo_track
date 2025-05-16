@@ -32,6 +32,12 @@ class TranscribeFile:
         with open(self.path, "r") as file:
             return file.readlines()
 
+    def get_file_length(self):
+        lines = self.get_file_lines()
+        for l in lines:
+            if "SoundFileInfo" in l:
+                return float(l.split(",")[-1])
+
     def get_marks(self):
         marks = []
         lines = self.get_file_lines()

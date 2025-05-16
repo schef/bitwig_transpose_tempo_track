@@ -8,8 +8,8 @@ from zipfile import ZipFile
 
 from project import Project
 from project import Warp, Marker
+from project import Interpolation, RealPoint, TimeSignaturePoint
 
-from project.xml_template import Interpolation, RealPoint, TimeSignaturePoint
 from transcribe_file import TranscribeFile
 
 def extract_project_file(path):
@@ -19,7 +19,7 @@ def extract_project_file(path):
         xml_string = Path(filepath).read_text()
         os.remove(TMP_FILE)
         parser = XmlParser()
-        from IPython import embed; embed()
+        #from IPython import embed; embed()
         return parser.from_string(xml_string, Project)
 
 def save_file(oproject, path):
@@ -52,9 +52,11 @@ if __name__ == "__main__":
 
     transcribe_filename = sys.argv[2]
     transcribe_file = TranscribeFile(transcribe_filename)
+    #from IPython import embed; embed()
 
     # latency between transcribe audio and bitwig audio
-    LATENCY = 0.04
+    #LATENCY = 0.04
+    LATENCY = 0.0
 
     # clean up warps
     warps.clear()
@@ -77,29 +79,61 @@ if __name__ == "__main__":
     # lets start in the second bar
     start_beat = float(numerator)
 
+    before_mark = False
+
     for transcribe_mark in transcribe_file.get_marks():
+
+        # ignore beats
         if transcribe_mark.mark_type == "B":
             continue
+
         splited_mark = transcribe_mark.label.split(";")
+
         # time signature
         for part in splited_mark:
             if "TS=" in part:
                 time_signature_text = part.replace("TS=", "")
                 numerator, denominator = time_signature_text.split("/")
                 time_signature.append(TimeSignaturePoint(time=str(start_beat), numerator=numerator, denominator=denominator))
+
         # tempo
         for part in splited_mark:
             if "T=" in part:
                 tempo_text = part.replace("T=", "")
                 tempo_float = float(tempo_text)
                 tempo.append(RealPoint(time=str(start_beat), value=str(tempo_float), interpolation=Interpolation.HOLD))
+
         # warps
-        warps.append(Warp(start_beat, transcribe_mark.timedelta.total_seconds() - LATENCY))
+        #TODO: make natural speed
+#        if not before_mark:
+#            before_mark = True
+#            warps.append(Warp(start_beat, 0.0))
+#            start_beat += 4.0
+
+
         # markers
         if transcribe_mark.mark_type == "S":
-            mark_text = transcribe_mark.label.split(";")[0]
+            parts = transcribe_mark.label.split(";")
+            mark_text = parts[0]
             markers.append(Marker(name=mark_text, color="#e5e500", time=start_beat))
-        start_beat += float(4 / float(denominator) * float(numerator))
+
+        #beats = float(8*4)
+        beats = float(numerator)
+        #beats = 4.0
+        #start_beat += float(4 / float(denominator) * float(numerator))
+        if len(parts) > 1:
+            if "M" in parts[1]:
+                beats = float(parts[1].split("=")[1]) * 4.0
+            if "B" in parts[1]:
+                beats = float(parts[1].split("=")[1])
+
+        warps.append(Warp(start_beat, transcribe_mark.timedelta.total_seconds() - LATENCY))
+
+        start_beat += beats
+
+    #TODO: make natural speed
+    # last warp
+    warps.append(Warp(start_beat, transcribe_file.get_file_length()))
 
     # extend the clip to beat duration so it is visible in the project
     oproject.arrangement.lanes.lanes[0].clips[0].clip[0].duration = start_beat
@@ -107,4 +141,4 @@ if __name__ == "__main__":
 
     #from IPython import embed; embed()
     save_file(oproject, dawproject_filename)
-    
+
