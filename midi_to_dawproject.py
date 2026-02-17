@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-import argparse
+import typer
+import contextlib
+import wave
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
@@ -16,6 +18,7 @@ from project import (
     Application,
     Arrangement,
     AutomationTarget,
+    Audio,
     BoolParameter,
     BuiltinDevice,
     Channel,
@@ -89,6 +92,26 @@ def format_float(value: float) -> str:
 
 def clamp_midi_key(value: int) -> int:
     return max(0, min(127, value))
+
+
+@dataclass
+class AudioInfo:
+    channels: int
+    sample_rate: int
+    duration_seconds: float
+
+
+def read_audio_info(path: Path) -> AudioInfo:
+    with contextlib.closing(wave.open(str(path), "rb")) as wav_file:
+        channels = wav_file.getnchannels()
+        sample_rate = wav_file.getframerate()
+        frames = wav_file.getnframes()
+        duration_seconds = frames / float(sample_rate) if sample_rate else 0.0
+    return AudioInfo(
+        channels=channels,
+        sample_rate=sample_rate,
+        duration_seconds=duration_seconds,
+    )
 
 
 def collect_midi_events(
@@ -327,6 +350,47 @@ def make_clips(clip: Optional[Clip], id_gen: IdGenerator) -> Clips:
     return Clips(id=id_gen.next(), clip=[clip] if clip else [])
 
 
+def make_audio_clip(
+    audio_path: Path,
+    tempo_bpm: float,
+    id_gen: IdGenerator,
+) -> Tuple[Clip, float]:
+    audio_info = read_audio_info(audio_path)
+    duration_beats = audio_info.duration_seconds * tempo_bpm / 60.0
+    clip_name = audio_path.stem
+    audio_file = Audio(
+        id=id_gen.next(),
+        algorithm="raw",
+        channels=audio_info.channels,
+        sample_rate=audio_info.sample_rate,
+        duration=audio_info.duration_seconds,
+        file=FileReference(path=f"audio/{audio_path.name}"),
+    )
+    inner_clip = Clip(
+        time=0.0,
+        duration=duration_beats,
+        content_time_unit=TimeUnit.SECONDS,
+        play_start=0.0,
+        play_stop=audio_info.duration_seconds,
+        fade_time_unit=TimeUnit.BEATS,
+        fade_in_time=0.0,
+        fade_out_time=0.0,
+        audio=audio_file,
+    )
+    outer_clip = Clip(
+        time=0.0,
+        duration=duration_beats,
+        play_start=0.0,
+        fade_time_unit=TimeUnit.BEATS,
+        fade_in_time=0.0,
+        fade_out_time=0.0,
+        enable=True,
+        name=clip_name,
+        clips=Clips(id=id_gen.next(), clip=[inner_clip]),
+    )
+    return outer_clip, duration_beats
+
+
 def build_tempo_points(
     tempo_events: List[Tuple[int, float]],
     ticks_per_beat: int,
@@ -382,7 +446,11 @@ def build_time_signature_points(
     )
 
 
-def build_project(midi_path: Path, harmony_state: Optional[Path] = None) -> Project:
+def build_project(
+    midi_path: Path,
+    harmony_state: Optional[Path] = None,
+    vocal_audio: Optional[Path] = None,
+) -> Project:
     mid = mido.MidiFile(midi_path)
     tempo_events, ts_events = collect_midi_events(mid)
     notes_by_channel, max_beats = collect_notes(mid)
@@ -406,6 +474,17 @@ def build_project(midi_path: Path, harmony_state: Optional[Path] = None) -> Proj
     else:
         ts_numerator = 4
         ts_denominator = 4
+
+    vocal_clip: Optional[Clip] = None
+    vocal_duration_beats: Optional[float] = None
+    if vocal_audio:
+        vocal_clip, vocal_duration_beats = make_audio_clip(
+            vocal_audio,
+            tempo_value,
+            id_gen,
+        )
+        if vocal_duration_beats is not None:
+            max_beats = max(max_beats, vocal_duration_beats)
 
     transport = Transport(
         tempo=make_real_parameter(
@@ -462,6 +541,7 @@ def build_project(midi_path: Path, harmony_state: Optional[Path] = None) -> Proj
     harmony_track_id = id_gen.next()
     bass_inst_track_id = id_gen.next()
     rhythm_track_id = id_gen.next()
+    vocal_track_id = id_gen.next() if vocal_audio else None
     fx_track_id = id_gen.next()
     master_track_id = id_gen.next()
 
@@ -634,6 +714,24 @@ def build_project(midi_path: Path, harmony_state: Optional[Path] = None) -> Proj
             device=rhythm_device,
         ),
     )
+    vocal_track = None
+    if vocal_track_id:
+        vocal_track = Track(
+            id=vocal_track_id,
+            name="Vocal",
+            color="#a37943",
+            comment="",
+            content_type=[ContentType.AUDIO],
+            loaded=True,
+            channel=make_channel(
+                id_gen.next(),
+                master_channel_id,
+                MixerRole.REGULAR,
+                0.316228,
+                id_gen,
+                send_destination=fx_channel_id,
+            ),
+        )
     fx_track = Track(
         id=fx_track_id,
         name="FX 1",
@@ -670,9 +768,10 @@ def build_project(midi_path: Path, harmony_state: Optional[Path] = None) -> Proj
         harmony_track,
         bass_inst_track,
         rhythm_track,
-        fx_track,
-        master_track,
     ]
+    if vocal_track:
+        project_tracks.append(vocal_track)
+    project_tracks.extend([fx_track, master_track])
 
     def clip_duration(notes: List[Note]) -> float:
         if not notes:
@@ -701,7 +800,7 @@ def build_project(midi_path: Path, harmony_state: Optional[Path] = None) -> Proj
     )
 
     arrangement_lanes = Lanes(id=id_gen.next(), time_unit=TimeUnit.BEATS)
-    arrangement_lanes.lanes = [
+    lanes_list: List[Lanes] = [
         make_lanes(group_track_id, make_clips(None, id_gen), id_gen),
         make_lanes(
             soprano_track_id,
@@ -795,9 +894,18 @@ def build_project(midi_path: Path, harmony_state: Optional[Path] = None) -> Proj
             id_gen,
         ),
         make_lanes(rhythm_track_id, make_clips(None, id_gen), id_gen),
-        make_lanes(fx_track_id, make_clips(None, id_gen), id_gen),
-        make_lanes(master_track_id, make_clips(None, id_gen), id_gen),
     ]
+    if vocal_track_id:
+        lanes_list.append(
+            make_lanes(vocal_track_id, make_clips(vocal_clip, id_gen), id_gen)
+        )
+    lanes_list.extend(
+        [
+            make_lanes(fx_track_id, make_clips(None, id_gen), id_gen),
+            make_lanes(master_track_id, make_clips(None, id_gen), id_gen),
+        ]
+    )
+    arrangement_lanes.lanes = lanes_list
 
     arrangement = Arrangement(
         id=id_gen.next(),
@@ -817,21 +925,23 @@ def build_project(midi_path: Path, harmony_state: Optional[Path] = None) -> Proj
     )
 
     scene_lanes = Lanes(id=id_gen.next())
+    scene_track_ids = [
+        group_track_id,
+        soprano_track_id,
+        alto_track_id,
+        tenor_track_id,
+        bass_track_id,
+        melody_track_id,
+        harmony_track_id,
+        bass_inst_track_id,
+        rhythm_track_id,
+    ]
+    if vocal_track_id:
+        scene_track_ids.append(vocal_track_id)
+    scene_track_ids.extend([fx_track_id, master_track_id])
     scene_lanes.clip_slot = [
         ClipSlot(id=id_gen.next(), track=track_id, has_stop=True)
-        for track_id in [
-            group_track_id,
-            soprano_track_id,
-            alto_track_id,
-            tenor_track_id,
-            bass_track_id,
-            melody_track_id,
-            harmony_track_id,
-            bass_inst_track_id,
-            rhythm_track_id,
-            fx_track_id,
-            master_track_id,
-        ]
+        for track_id in scene_track_ids
     ]
 
     scenes = Project.Scenes(
@@ -851,7 +961,10 @@ def build_project(midi_path: Path, harmony_state: Optional[Path] = None) -> Proj
 
 
 def write_dawproject(
-    project: Project, output_path: Path, harmony_state: Optional[Path] = None
+    project: Project,
+    output_path: Path,
+    harmony_state: Optional[Path] = None,
+    vocal_audio: Optional[Path] = None,
 ) -> None:
     config = SerializerConfig(pretty_print=True)
     serializer = XmlSerializer(config=config)
@@ -867,25 +980,44 @@ def write_dawproject(
                 harmony_state,
                 f"plugins/{harmony_state.name}",
             )
+        if vocal_audio:
+            zip_file.write(vocal_audio, f"audio/{vocal_audio.name}")
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Convert MIDI to dawproject")
-    parser.add_argument("midi", type=Path, help="Input MIDI file")
-    parser.add_argument("output", type=Path, help="Output .dawproject file")
-    parser.add_argument(
+app = typer.Typer(help="Convert MIDI to a Bitwig dawproject.")
+
+
+@app.command()
+def main(
+    midi: Path = typer.Argument(..., help="Input MIDI file"),
+    output: Path = typer.Argument(..., help="Output .dawproject file"),
+    harmony_state: Optional[Path] = typer.Option(
+        None,
         "--harmony-state",
-        type=Path,
         help="Optional setBfree .fxb file for Harmony track",
-    )
-    args = parser.parse_args()
-
-    harmony_state = args.harmony_state if args.harmony_state else None
+    ),
+    vocal_audio: Optional[Path] = typer.Option(
+        None,
+        "--vocal-audio",
+        help="Optional vocal audio file to include",
+    ),
+) -> None:
     if harmony_state and not harmony_state.exists():
         raise FileNotFoundError(f"Harmony state file not found: {harmony_state}")
-    project = build_project(args.midi, harmony_state=harmony_state)
-    write_dawproject(project, args.output, harmony_state=harmony_state)
+    if vocal_audio and not vocal_audio.exists():
+        raise FileNotFoundError(f"Vocal audio file not found: {vocal_audio}")
+    project = build_project(
+        midi,
+        harmony_state=harmony_state,
+        vocal_audio=vocal_audio,
+    )
+    write_dawproject(
+        project,
+        output,
+        harmony_state=harmony_state,
+        vocal_audio=vocal_audio,
+    )
 
 
 if __name__ == "__main__":
-    main()
+    app()
