@@ -3,6 +3,7 @@ Using Bitwig's DAWproject and Transcribe! this script creates warped on-beat tra
 ## Install
 `pip install xsdata[cli,lxml,soap]`
 `pip install mido`
+`pip install typer`
 
 ## What this repo can do
 - Convert a Transcribe! marker file into a dawproject with tempo and time-signature automation.
